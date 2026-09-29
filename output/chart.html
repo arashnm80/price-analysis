@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Coding Agent Index vs Cursor cost</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; background: #f7f6f3; color: #1c1917; font: 15px/1.45 ui-sans-serif, system-ui, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 64px; }
+  h1 { font-size: 22px; font-weight: 650; margin: 0 0 6px; }
+  .lede { color: #57534e; margin: 0 0 18px; max-width: 70ch; }
+  .row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+  button { border: 1px solid #d6d3d1; background: #fff; color: #1c1917; border-radius: 6px; padding: 6px 10px; font: inherit; cursor: pointer; }
+  button[aria-pressed="true"] { background: #1c1917; color: #fafaf9; border-color: #1c1917; }
+  .chart { background: #fff; border: 1px solid #e7e5e4; border-radius: 8px; }
+  .note { color: #57534e; font-size: 13px; margin: 10px 0 22px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; border: 1px solid #e7e5e4; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid #f5f5f4; vertical-align: top; }
+  th { font-weight: 650; color: #44403c; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.on td:first-child { box-shadow: inset 3px 0 0 #1c1917; }
+  h2 { font-size: 16px; margin: 28px 0 8px; }
+  .tip { position: fixed; pointer-events: none; background: #1c1917; color: #fafaf9; padding: 8px 10px; border-radius: 6px; font-size: 12px; display: none; max-width: 280px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Coding Agent Index vs Cursor cost per task</h1>
+  <p class="lede">Each point is one Artificial Analysis coding-agent run. Height is the Coding Agent Index. Position left is what that same token mix costs on Cursor. The line joins the Pareto set: nothing else is both smarter and cheaper.</p>
+  <div class="row">
+    <button id="individual" aria-pressed="true" type="button">Individual plans</button>
+    <button id="teams" aria-pressed="false" type="button">Teams and Enterprise</button>
+  </div>
+  <div class="chart"><svg id="plot" viewBox="0 0 980 620" width="100%"></svg></div>
+  <p class="note" id="caption"></p>
+  <h2>Runs priced on Cursor</h2>
+  <table id="table"></table>
+  <h2>Left off the chart</h2>
+  <table id="excluded"></table>
+</main>
+<div class="tip" id="tip"></div>
+<script>
+const RESULT = {"retrieved": "2026-09-29", "index": "Artificial Analysis Coding Agent Index v1.5", "indexComponents": ["DeepSWE v1.1", "Terminal-Bench 4.0", "SWE-Atlas-QnA"], "pricing": "https://cursor.com/docs/models-and-pricing", "intelligence": "https://artificialanalysis.ai/agents/coding-agents", "points": [{"id": "private-anthropic_claude-beignet-eap-max", "label": "Claude Sonnet 5.5 (max)", "aaLabel": "Claude Code - Sonnet 5.5 (max)", "agent": "Claude Code", "model": "Sonnet 5.5 (max)", "cursorModel": "Claude Sonnet 5.5", "provider": "Anthropic", "firstParty": false, "index": 68.36, "aaCostUsd": 14.1908, "individualUsd": 14.1908, "teamsUsd": 21.1973, "teamsFeeUsd": 7.0065, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 1135341, "cacheRead": 26006028, "cacheWrite": 283692, "output": 600968}, "cursorPrice": {"input": 2, "cacheWrite": 2.5, "cacheRead": 0.2, "output": 10}, "paretoIndividual": true, "paretoTeams": true, "chartLabel": "Sonnet 5.5 (max)"}, {"id": "anthropic_claude-opus-5-5", "label": "Claude Opus 5.5 (max)", "aaLabel": "Claude Code - Opus 5.5 (max)", "agent": "Claude Code", "model": "Opus 5.5 (max)", "cursorModel": "Claude Opus 5.5", "provider": "Anthropic", "firstParty": false, "index": 65.99, "aaCostUsd": 13.0364, "individualUsd": 13.0364, "teamsUsd": 16.9673, "teamsFeeUsd": 3.9309, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 649283, "cacheRead": 14568924, "cacheWrite": 172386, "output": 333177}, "cursorPrice": {"input": 4, "cacheWrite": 5, "cacheRead": 0.2, "output": 20}, "paretoIndividual": true, "paretoTeams": true, "chartLabel": "Opus 5.5 (max)"}, {"id": "private-anthropic_claude-beignet-eap-xhigh", "label": "Claude Sonnet 5.5 (xhigh)", "aaLabel": "Claude Code - Sonnet 5.5 (xhigh)", "agent": "Claude Code", "model": "Sonnet 5.5 (xhigh)", "cursorModel": "Claude Sonnet 5.5", "provider": "Anthropic", "firstParty": false, "index": 62.87, "aaCostUsd": 3.3334, "individualUsd": 3.3334, "teamsUsd": 5.1254, "teamsFeeUsd": 1.792, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 268219, "cacheRead": 6693764, "cacheWrite": 80494, "output": 125696}, "cursorPrice": {"input": 2, "cacheWrite": 2.5, "cacheRead": 0.2, "output": 10}, "paretoIndividual": true, "paretoTeams": true, "chartLabel": "Sonnet 5.5 (xhigh)"}, {"id": "anthropic_claude-fable-5-1", "label": "Claude Fable 5.1 (max, with fallback)", "aaLabel": "Claude Code - Fable 5.1 (max) (with fallback)", "agent": "Claude Code", "model": "Fable 5.1 (max) (with fallback)", "cursorModel": "Claude Fable 5.1", "provider": "Anthropic", "firstParty": false, "index": 62.22, "aaCostUsd": 12.3881, "individualUsd": 12.3881, "teamsUsd": 13.8298, "teamsFeeUsd": 1.4417, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 376067, "cacheRead": 5205556, "cacheWrite": 51557, "output": 133632}, "cursorPrice": {"input": 10, "cacheWrite": 12.5, "cacheRead": 0.25, "output": 50}, "paretoIndividual": false, "paretoTeams": false, "chartLabel": "Fable 5.1 (max*)"}, {"id": "anthropic_claude-opus-5", "label": "Claude Opus 5 (max)", "aaLabel": "Claude Code - Opus 5 (max)", "agent": "Claude Code", "model": "Opus 5 (max)", "cursorModel": "Claude Opus 5", "provider": "Anthropic", "firstParty": false, "index": 59.73, "aaCostUsd": 10.7892, "individualUsd": 10.7892, "teamsUsd": 13.6474, "teamsFeeUsd": 2.8582, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 309180, "cacheRead": 10929014, "cacheWrite": 57975, "output": 136656}, "cursorPrice": {"input": 5, "cacheWrite": 6.25, "cacheRead": 0.5, "output": 25}, "paretoIndividual": false, "paretoTeams": false, "chartLabel": "Opus 5 (max)"}, {"id": "xai_grok-bop-o86-xhigh", "label": "Grok 4.7 (xhigh)", "aaLabel": "Grok Build - Grok 4.7 (xhigh)", "agent": "Grok Build", "model": "Grok 4.7 (xhigh)", "cursorModel": "Grok 4.7", "provider": "Cursor", "firstParty": true, "index": 56.27, "aaCostUsd": 8.8175, "individualUsd": 8.8175, "teamsUsd": 8.8175, "teamsFeeUsd": 0.0, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 651391, "cacheRead": 13550057, "cacheWrite": 0, "output": 123276}, "cursorPrice": {"input": 2, "cacheWrite": null, "cacheRead": 0.5, "output": 6}, "paretoIndividual": false, "paretoTeams": false, "chartLabel": "Grok 4.7 (xhigh)"}, {"id": "private-anthropic_claude-beignet-eap-high", "label": "Claude Sonnet 5.5 (high)", "aaLabel": "Claude Code - Sonnet 5.5 (high)", "agent": "Claude Code", "model": "Sonnet 5.5 (high)", "cursorModel": "Claude Sonnet 5.5", "provider": "Anthropic", "firstParty": false, "index": 55.01, "aaCostUsd": 1.2355, "individualUsd": 1.2355, "teamsUsd": 1.9098, "teamsFeeUsd": 0.6743, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 103601, "cacheRead": 2507283, "cacheWrite": 44750, "output": 41496}, "cursorPrice": {"input": 2, "cacheWrite": 2.5, "cacheRead": 0.2, "output": 10}, "paretoIndividual": true, "paretoTeams": true, "chartLabel": "Sonnet 5.5 (high)"}, {"id": "openai_gpt-5-6-sol", "label": "GPT-5.6 Sol (max)", "aaLabel": "Codex - GPT-5.6 Sol (max) ({'reasoning_effort': 'max'})", "agent": "Codex", "model": "GPT-5.6 Sol (max)", "cursorModel": "GPT-5.6 Sol", "provider": "OpenAI", "firstParty": false, "index": 54.56, "aaCostUsd": 6.3533, "individualUsd": 6.3533, "teamsUsd": 8.9013, "teamsFeeUsd": 2.548, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 336897, "cacheRead": 9784084, "cacheWrite": 21798, "output": 49155}, "cursorPrice": {"input": 4, "cacheWrite": 5, "cacheRead": 0.4, "output": 20}, "paretoIndividual": false, "paretoTeams": false, "chartLabel": "GPT-5.6 Sol (max)"}, {"id": "meta_aa_glacier135", "label": "Muse Spark 1.3 (max)", "aaLabel": "Muse Code - Muse Spark 1.3 (max)", "agent": "Muse Code", "model": "Muse Spark 1.3 (max)", "cursorModel": "Muse Spark 1.3", "provider": "Meta", "firstParty": false, "index": 54.3, "aaCostUsd": 3.9775, "individualUsd": 3.9775, "teamsUsd": 8.1549, "teamsFeeUsd": 4.1774, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 355315, "cacheRead": 16090656, "cacheWrite": 0, "output": 263474}, "cursorPrice": {"input": 1.25, "cacheWrite": null, "cacheRead": 0.15, "output": 4.25}, "paretoIndividual": false, "paretoTeams": false, "chartLabel": "Muse (max)"}, {"id": "zai_glm-5-3", "label": "GLM 5.3 (max)", "aaLabel": "Opencode - GLM-5.3 ({'reasoning_effort': 'max'})", "agent": "Opencode", "model": "GLM-5.3", "cursorModel": "GLM 5.3", "provider": "Z.ai", "firstParty": false, "index": 53.55, "aaCostUsd": 4.2414, "individualUsd": 4.2414, "teamsUsd": 7.8105, "teamsFeeUsd": 3.5691, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 194809, "cacheRead": 14007356, "cacheWrite": 0, "output": 74259}, "cursorPrice": {"input": 1.4, "cacheWrite": null, "cacheRead": 0.26, "output": 4.4}, "paretoIndividual": false, "paretoTeams": false, "chartLabel": "GLM 5.3 (max)"}, {"id": "moonshot_kimi-k3", "label": "Kimi K3", "aaLabel": "Kimi Code CLI - Kimi K3", "agent": "Kimi Code CLI", "model": "Kimi K3", "cursorModel": "Kimi K3", "provider": "Moonshot", "firstParty": false, "index": 51.93, "aaCostUsd": 5.0472, "individualUsd": 5.0472, "teamsUsd": 7.1675, "teamsFeeUsd": 2.1203, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 419395, "cacheRead": 7968496, "cacheWrite": 0, "output": 93231}, "cursorPrice": {"input": 3, "cacheWrite": null, "cacheRead": 0.3, "output": 15}, "paretoIndividual": false, "paretoTeams": false, "chartLabel": "Kimi K3"}, {"id": "meta_joyful-jello138", "label": "Muse Spark 1.3 (xhigh)", "aaLabel": "Muse Code - Muse Spark 1.3 (xhigh)", "agent": "Muse Code 1.0.2 RC", "model": "Muse Spark 1.3 (xhigh)", "cursorModel": "Muse Spark 1.3", "provider": "Meta", "firstParty": false, "index": 48.3, "aaCostUsd": 3.4678, "individualUsd": 3.4678, "teamsUsd": 7.527, "teamsFeeUsd": 4.0593, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 382176, "cacheRead": 15709289, "cacheWrite": 0, "output": 145629}, "cursorPrice": {"input": 1.25, "cacheWrite": null, "cacheRead": 0.15, "output": 4.25}, "paretoIndividual": false, "paretoTeams": false, "chartLabel": "Muse (xhigh)"}, {"id": "xai_grok-4-6-xhigh", "label": "Grok 4.6 (xhigh)", "aaLabel": "Grok Build - Grok 4.6 (xhigh)", "agent": "Grok Build", "model": "Grok 4.6 (xhigh)", "cursorModel": "Grok 4.6", "provider": "Cursor", "firstParty": true, "index": 46.97, "aaCostUsd": 3.5701, "individualUsd": 3.5701, "teamsUsd": 3.5701, "teamsFeeUsd": 0.0, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 327053, "cacheRead": 5160617, "cacheWrite": 0, "output": 55955}, "cursorPrice": {"input": 2, "cacheWrite": null, "cacheRead": 0.5, "output": 6}, "paretoIndividual": false, "paretoTeams": false, "chartLabel": "Grok 4.6 (xhigh)"}, {"id": "private-anthropic_claude-beignet-eap-medium", "label": "Claude Sonnet 5.5 (medium)", "aaLabel": "Claude Code - Sonnet 5.5 (medium)", "agent": "Claude Code", "model": "Sonnet 5.5 (medium)", "cursorModel": "Claude Sonnet 5.5", "provider": "Anthropic", "firstParty": false, "index": 45.88, "aaCostUsd": 0.6188, "individualUsd": 0.6188, "teamsUsd": 0.9382, "teamsFeeUsd": 0.3194, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 59026, "cacheRead": 1173805, "cacheWrite": 24292, "output": 20521}, "cursorPrice": {"input": 2, "cacheWrite": 2.5, "cacheRead": 0.2, "output": 10}, "paretoIndividual": true, "paretoTeams": true, "chartLabel": "Sonnet 5.5 (medium)"}, {"id": "openai_gpt-5-6-luna", "label": "GPT-5.6 Luna (max)", "aaLabel": "Codex - GPT-5.6 Luna (max)", "agent": "Codex", "model": "GPT-5.6 Luna (max)", "cursorModel": "GPT-5.6 Luna", "provider": "OpenAI", "firstParty": false, "index": 43.22, "aaCostUsd": 0.438, "individualUsd": 0.438, "teamsUsd": 4.1639, "teamsFeeUsd": 3.7259, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 247454, "cacheRead": 14535766, "cacheWrite": 49003, "output": 71305}, "cursorPrice": {"input": 0.2, "cacheWrite": 0.25, "cacheRead": 0.02, "output": 1.2}, "paretoIndividual": true, "paretoTeams": false, "chartLabel": "GPT-5.6 Luna (max)"}, {"id": "private-anthropic_claude-beignet-eap-low", "label": "Claude Sonnet 5.5 (low)", "aaLabel": "Claude Code - Sonnet 5.5 (low)", "agent": "Claude Code", "model": "Sonnet 5.5 (low)", "cursorModel": "Claude Sonnet 5.5", "provider": "Anthropic", "firstParty": false, "index": 42.06, "aaCostUsd": 0.4831, "individualUsd": 0.4831, "teamsUsd": 0.7327, "teamsFeeUsd": 0.2496, "priceDiffersFromAa": false, "tokens": {"uncachedInput": 44299, "cacheRead": 917183, "cacheWrite": 21216, "output": 15804}, "cursorPrice": {"input": 2, "cacheWrite": 2.5, "cacheRead": 0.2, "output": 10}, "paretoIndividual": false, "paretoTeams": true, "chartLabel": "Sonnet 5.5 (low)"}, {"id": "google_skimaki_ai-studio", "label": "Gemini 3.8 Flash (high)", "aaLabel": "Antigravity SDK - Gemini 3.8 Flash (high)", "agent": "Antigravity SDK v0.1.12", "model": "Gemini 3.8 Flash (high)", "cursorModel": "Gemini 3.8 Flash", "provider": "Google", "firstParty": false, "index": 41.86, "aaCostUsd": 2.4674, "individualUsd": 2.4384, "teamsUsd": 5.8162, "teamsFeeUsd": 3.3778, "priceDiffersFromAa": true, "tokens": {"uncachedInput": 1523555, "cacheRead": 11871692, "cacheWrite": 0, "output": 115826}, "cursorPrice": {"input": 0.75, "cacheWrite": null, "cacheRead": 0.075, "output": 3.5}, "paretoIndividual": false, "paretoTeams": false, "chartLabel": "Gemini 3.8 (high)"}], "excluded": [{"label": "Codex - GPT-6 Sol (max)", "model": "GPT-6 Sol (max)", "agent": "Codex", "index": 56.662591275779974, "aaCostUsd": 2.989729004180416, "reason": "Not a single model on the Cursor pricing page"}, {"label": "Codex - GPT-6 Astra (max)", "model": "GPT-6 Astra (max)", "agent": "Codex", "index": 61.64504498789397, "aaCostUsd": 7.46709735138597, "reason": "Not a single model on the Cursor pricing page"}, {"label": "Devin Fusion CLI - GPT-6 Astra XHigh + SWE-2 Medium", "model": "GPT-6 Astra XHigh + SWE-2 Medium", "agent": "Devin Fusion CLI", "index": 58.8884131062264, "aaCostUsd": 4.536492777821779, "reason": "Not a single model on the Cursor pricing page"}, {"label": "Claude Code - Qwen3.8 Max", "model": "Qwen3.8 Max", "agent": "Claude Code", "index": 43.26529641259874, "aaCostUsd": 3.478965577837015, "reason": "Not a single model on the Cursor pricing page"}, {"label": "Codex - DeepSeek V4 Flash 0731 (max)", "model": "DeepSeek V4 Flash 0731 (max)", "agent": "Codex", "index": 38.74247758775307, "aaCostUsd": 0.08506419165060494, "reason": "Not a single model on the Cursor pricing page"}, {"label": "Codex - GPT-6 Luna (max) ({'reasoning_effort': 'max'})", "model": "GPT-6 Luna (max)", "agent": "Codex", "index": 41.07438934016153, "aaCostUsd": 0.17591172304455457, "reason": "Not a single model on the Cursor pricing page"}, {"label": "Devin Fusion CLI - Claude Fable 5.1 XHigh + SWE-2 Medium", "model": "Claude Fable 5.1 XHigh + SWE-2 Medium", "agent": "Devin Fusion CLI", "index": 61.68255492406223, "aaCostUsd": 7.897126985217273, "reason": "Not a single model on the Cursor pricing page"}, {"label": "Codex - DeepSeek V4 Pro 0813 (max)", "model": "DeepSeek V4 Pro 0813 (max)", "agent": "Codex", "index": 43.05203524444174, "aaCostUsd": 0.23804610720792058, "reason": "Not a single model on the Cursor pricing page"}], "frontierIndividual": ["GPT-5.6 Luna (max)", "Claude Sonnet 5.5 (medium)", "Claude Sonnet 5.5 (high)", "Claude Sonnet 5.5 (xhigh)", "Claude Opus 5.5 (max)", "Claude Sonnet 5.5 (max)"], "frontierTeams": ["Claude Sonnet 5.5 (low)", "Claude Sonnet 5.5 (medium)", "Claude Sonnet 5.5 (high)", "Claude Sonnet 5.5 (xhigh)", "Claude Opus 5.5 (max)", "Claude Sonnet 5.5 (max)"]};
+const COLOR = {"Anthropic": "#b4532a", "Cursor": "#1f7a4d", "OpenAI": "#2c5f8a", "Meta": "#5b4b8a", "Google": "#8d6a2f", "Z.ai": "#7a4e62", "Moonshot": "#3d6b66"};
+const svg = document.getElementById("plot");
+const tip = document.getElementById("tip");
+let mode = "individual";
+
+function costOf(p) { return mode === "teams" ? p.teamsUsd : p.individualUsd; }
+function onFrontier(p) { return mode === "teams" ? p.paretoTeams : p.paretoIndividual; }
+
+function draw() {
+  const pts = RESULT.points;
+  const costs = pts.map(costOf);
+  const xmin = Math.min(...costs) * 0.82;
+  const xmax = Math.max(...costs) * 1.18;
+  const ymin = 38, ymax = 72;
+  const L = 72, R = 930, T = 28, B = 500;
+  const W = 980, H = 620;
+  const xOf = (c) => L + (Math.log10(c) - Math.log10(xmin)) / (Math.log10(xmax) - Math.log10(xmin)) * (R - L);
+  const yOf = (s) => B - (s - ymin) / (ymax - ymin) * (B - T);
+  const ns = "http://www.w3.org/2000/svg";
+  svg.replaceChildren();
+  const add = (name, attrs) => {
+    const el = document.createElementNS(ns, name);
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+    svg.appendChild(el);
+    return el;
+  };
+  for (const v of [40, 45, 50, 55, 60, 65, 70]) {
+    const y = yOf(v);
+    add("line", {x1: L, y1: y, x2: R, y2: y, stroke: "#e7e5e4"});
+    const t = add("text", {x: L - 10, y: y + 4, "text-anchor": "end", fill: "#78716c", "font-size": "11"});
+    t.textContent = v;
+  }
+  for (const v of [0.5, 1, 2, 5, 10, 20].filter(v => v >= xmin && v <= xmax)) {
+    const x = xOf(v);
+    add("line", {x1: x, y1: T, x2: x, y2: B, stroke: "#e7e5e4"});
+    const t = add("text", {x, y: B + 20, "text-anchor": "middle", fill: "#78716c", "font-size": "11"});
+    t.textContent = "$" + v;
+  }
+  add("line", {x1: L, y1: T, x2: L, y2: B, stroke: "#d6d3d1"});
+  add("line", {x1: L, y1: B, x2: R, y2: B, stroke: "#d6d3d1"});
+  const ylab = add("text", {x: 22, y: (T + B) / 2, "text-anchor": "middle", fill: "#44403c", "font-size": "12", transform: `rotate(-90 22 ${(T + B) / 2})`});
+  ylab.textContent = "Coding Agent Index";
+  const xlab = add("text", {x: (L + R) / 2, y: B + 44, "text-anchor": "middle", fill: "#44403c", "font-size": "12"});
+  xlab.textContent = "Cursor cost per task (USD, log scale)";
+  const frontier = pts.filter(onFrontier).sort((a, b) => costOf(a) - costOf(b));
+  add("polyline", {
+    points: frontier.map(p => `${xOf(costOf(p)).toFixed(1)},${yOf(p.index).toFixed(1)}`).join(" "),
+    fill: "none", stroke: "#1c1917", "stroke-width": "1.75"
+  });
+  const boxes = [];
+  const hits = (x, y, w, h) => boxes.some(b => x < b[0] + b[2] && x + w > b[0] && y < b[1] + b[3] && y + h > b[1]);
+  function place(x, y, w, h) {
+    const spots = [[9, -8], [9, 14], [-w - 8, -8], [-w - 8, 14]];
+    for (let step = 1; step < 6; step++) {
+      spots.push([9, -8 - step * 12], [9, 14 + step * 12], [-w - 8, -8 - step * 12], [-w - 8, 14 + step * 12]);
+    }
+    for (const [dx, dy] of spots) {
+      const lx = x + dx, ly = y + dy, by = ly - 11;
+      if (lx < 76 || lx + w > R + 40 || by < T || by + h > B) continue;
+      if (hits(lx, by, w, h)) continue;
+      return [lx, ly];
+    }
+    return null;
+  }
+  for (const p of [...pts].sort((a, b) => Number(onFrontier(a)) - Number(onFrontier(b)))) {
+    const x = xOf(costOf(p)), y = yOf(p.index);
+    const c = add("circle", {
+      cx: x, cy: y, r: onFrontier(p) ? 6.5 : 4.5,
+      fill: COLOR[p.provider] || "#44403c",
+      stroke: onFrontier(p) ? "#1c1917" : "#fff",
+      "stroke-width": onFrontier(p) ? 1.6 : 1
+    });
+    c.addEventListener("mousemove", (ev) => {
+      tip.style.display = "block";
+      tip.style.left = (ev.clientX + 12) + "px";
+      tip.style.top = (ev.clientY + 12) + "px";
+      tip.textContent = `${p.label} · index ${p.index.toFixed(2)} · $${costOf(p).toFixed(2)} · ${p.agent}`;
+    });
+    c.addEventListener("mouseleave", () => { tip.style.display = "none"; });
+    const label = p.chartLabel;
+    const w = label.length * 5.6 + 4;
+    const placed = place(x, y, w, 14);
+    if (!placed) continue;
+    const [lx, ly] = placed;
+    boxes.push([lx, ly - 11, w, 14]);
+    const t = add("text", {x: lx, y: ly, fill: "#292524", "font-size": "11", "font-weight": onFrontier(p) ? "650" : "450"});
+    t.textContent = label;
+  }
+  let lx = L;
+  const ly = H - 22;
+  const key = add("text", {x: lx, y: ly, fill: "#44403c", "font-size": "11"});
+  key.textContent = "Pareto line";
+  add("line", {x1: lx + 72, y1: ly - 4, x2: lx + 98, y2: ly - 4, stroke: "#1c1917", "stroke-width": "1.75"});
+  lx += 114;
+  for (const [name, color] of Object.entries(COLOR)) {
+    if (!pts.some(p => p.provider === name)) continue;
+    add("circle", {cx: lx, cy: ly - 4, r: 4.5, fill: color});
+    const t = add("text", {x: lx + 8, y: ly, fill: "#44403c", "font-size": "11"});
+    t.textContent = name;
+    lx += 18 + name.length * 6.2;
+  }
+  document.getElementById("caption").textContent = mode === "teams"
+    ? "Teams and Enterprise add $0.25 per million tokens on third-party models (input, output, and cache). Grok is exempt. Individual plans do not pay this fee."
+    : "Individual plans use the Cursor list price only. Gemini 3.8 Flash output is $3.50/M here versus $3.75/M on Artificial Analysis. Every other plotted model uses the same per-token rates on both.";
+  const headers = ["Model", "Agent on the benchmark", "Index", "AA cost", "Cursor individual", "Cursor teams", "On the line"];
+  const table = document.getElementById("table");
+  table.innerHTML = "<thead><tr>" + headers.map((h, i) => `<th class="${i > 1 && i < 6 ? "num" : ""}">${h}</th>`).join("") + "</tr></thead>";
+  const body = document.createElement("tbody");
+  for (const p of pts) {
+    const tr = document.createElement("tr");
+    if (onFrontier(p)) tr.className = "on";
+    const cells = [
+      p.label, p.agent, p.index.toFixed(2),
+      "$" + p.aaCostUsd.toFixed(2),
+      "$" + p.individualUsd.toFixed(2),
+      "$" + p.teamsUsd.toFixed(2),
+      onFrontier(p) ? "Yes" : ""
+    ];
+    cells.forEach((value, i) => {
+      const td = document.createElement("td");
+      if (i > 1 && i < 6) td.className = "num";
+      td.textContent = value;
+      tr.appendChild(td);
+    });
+    body.appendChild(tr);
+  }
+  table.appendChild(body);
+}
+
+function setMode(next) {
+  mode = next;
+  document.getElementById("individual").setAttribute("aria-pressed", String(next === "individual"));
+  document.getElementById("teams").setAttribute("aria-pressed", String(next === "teams"));
+  draw();
+}
+document.getElementById("individual").onclick = () => setMode("individual");
+document.getElementById("teams").onclick = () => setMode("teams");
+
+const ex = document.getElementById("excluded");
+ex.innerHTML = "<thead><tr><th>Run</th><th class='num'>Index</th><th class='num'>AA cost</th><th>Why it is off</th></tr></thead>";
+const exBody = document.createElement("tbody");
+for (const row of RESULT.excluded) {
+  const tr = document.createElement("tr");
+  [row.label, row.index.toFixed(2), "$" + row.aaCostUsd.toFixed(2), row.reason].forEach((value, i) => {
+    const td = document.createElement("td");
+    if (i === 1 || i === 2) td.className = "num";
+    td.textContent = value;
+    tr.appendChild(td);
+  });
+  exBody.appendChild(tr);
+}
+ex.appendChild(exBody);
+setMode("individual");
+</script>
+</body>
+</html>
