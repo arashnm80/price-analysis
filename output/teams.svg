@@ -2,84 +2,106 @@
 <title>Coding Agent Index vs Cursor cost per task</title>
 <rect width="100%" height="100%" fill="#f7f6f3"/>
 <text x="72" y="34" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="650" fill="#1c1917">Coding Agent Index vs Cursor cost per task</text>
-<text x="72" y="56" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#57534e">Teams and Enterprise · list price plus $0.25/M token rate · 29 Sep 2026</text>
-<line x1="72" y1="531.6" x2="930" y2="531.6" stroke="#e7e5e4" stroke-width="1"/>
-<text x="62" y="535.6" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">40</text>
-<line x1="72" y1="460.8" x2="930" y2="460.8" stroke="#e7e5e4" stroke-width="1"/>
-<text x="62" y="464.8" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">45</text>
-<line x1="72" y1="389.9" x2="930" y2="389.9" stroke="#e7e5e4" stroke-width="1"/>
-<text x="62" y="393.9" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">50</text>
-<line x1="72" y1="319.0" x2="930" y2="319.0" stroke="#e7e5e4" stroke-width="1"/>
-<text x="62" y="323.0" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">55</text>
-<line x1="72" y1="248.1" x2="930" y2="248.1" stroke="#e7e5e4" stroke-width="1"/>
-<text x="62" y="252.1" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">60</text>
-<line x1="72" y1="177.2" x2="930" y2="177.2" stroke="#e7e5e4" stroke-width="1"/>
-<text x="62" y="181.2" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">65</text>
-<line x1="72" y1="106.4" x2="930" y2="106.4" stroke="#e7e5e4" stroke-width="1"/>
-<text x="62" y="110.4" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">70</text>
-<line x1="189.2" y1="78" x2="189.2" y2="560" stroke="#e7e5e4" stroke-width="1"/>
-<text x="189.2" y="580" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$1</text>
-<line x1="348.7" y1="78" x2="348.7" y2="560" stroke="#e7e5e4" stroke-width="1"/>
-<text x="348.7" y="580" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$2</text>
-<line x1="559.6" y1="78" x2="559.6" y2="560" stroke="#e7e5e4" stroke-width="1"/>
-<text x="559.6" y="580" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$5</text>
-<line x1="719.0" y1="78" x2="719.0" y2="560" stroke="#e7e5e4" stroke-width="1"/>
-<text x="719.0" y="580" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$10</text>
-<line x1="878.5" y1="78" x2="878.5" y2="560" stroke="#e7e5e4" stroke-width="1"/>
-<text x="878.5" y="580" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$20</text>
-<line x1="72" y1="78" x2="72" y2="560" stroke="#d6d3d1"/>
-<line x1="72" y1="560" x2="930" y2="560" stroke="#d6d3d1"/>
-<text x="22" y="319" transform="rotate(-90 22 319)" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#44403c">Coding Agent Index</text>
-<text x="501" y="602" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#44403c">Cost per task (USD, log scale)</text>
-<polyline points="117.7,502.4 174.5,448.3 338.1,318.9 565.3,207.4 840.7,163.2 891.9,129.6" fill="none" stroke="#1c1917" stroke-width="1.75" stroke-linejoin="round"/>
-<circle cx="793.7" cy="216.6" r="4.5" fill="#b4532a" stroke="#ffffff" stroke-width="1"><title>Claude Fable 5.1 (max, with fallback) · index 62.22 · $13.83</title></circle>
-<text x="802.7" y="208.6" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Fable 5.1 (max*)</text>
-<circle cx="790.6" cy="251.9" r="4.5" fill="#b4532a" stroke="#ffffff" stroke-width="1"><title>Claude Opus 5 (max) · index 59.73 · $13.65</title></circle>
-<text x="799.6" y="243.9" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Opus 5 (max)</text>
-<circle cx="690.1" cy="301.0" r="4.5" fill="#1f7a4d" stroke="#ffffff" stroke-width="1"><title>Grok 4.7 (xhigh) · index 56.27 · $8.82</title></circle>
-<text x="699.1" y="293.0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Grok 4.7 (xhigh)</text>
-<circle cx="692.3" cy="325.2" r="4.5" fill="#2c5f8a" stroke="#ffffff" stroke-width="1"><title>GPT-5.6 Sol (max) · index 54.56 · $8.90</title></circle>
-<text x="701.3" y="317.2" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">GPT-5.6 Sol (max)</text>
-<circle cx="672.1" cy="328.9" r="4.5" fill="#5b4b8a" stroke="#ffffff" stroke-width="1"><title>Muse Spark 1.3 (max) · index 54.30 · $8.15</title></circle>
-<text x="681.1" y="342.9" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Muse (max)</text>
-<circle cx="662.2" cy="339.6" r="4.5" fill="#7a4e62" stroke="#ffffff" stroke-width="1"><title>GLM 5.3 (max) · index 53.55 · $7.81</title></circle>
-<text x="577.4" y="331.6" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">GLM 5.3 (max)</text>
-<circle cx="642.4" cy="362.5" r="4.5" fill="#3d6b66" stroke="#ffffff" stroke-width="1"><title>Kimi K3 · index 51.93 · $7.17</title></circle>
-<text x="651.4" y="376.5" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Kimi K3</text>
-<circle cx="653.7" cy="414.0" r="4.5" fill="#5b4b8a" stroke="#ffffff" stroke-width="1"><title>Muse Spark 1.3 (xhigh) · index 48.30 · $7.53</title></circle>
-<text x="662.7" y="406.0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Muse (xhigh)</text>
-<circle cx="482.0" cy="432.8" r="4.5" fill="#1f7a4d" stroke="#ffffff" stroke-width="1"><title>Grok 4.6 (xhigh) · index 46.97 · $3.57</title></circle>
-<text x="491.0" y="424.8" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Grok 4.6 (xhigh)</text>
-<circle cx="517.5" cy="486.0" r="4.5" fill="#2c5f8a" stroke="#ffffff" stroke-width="1"><title>GPT-5.6 Luna (max) · index 43.22 · $4.16</title></circle>
-<text x="526.5" y="478.0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">GPT-5.6 Luna (max)</text>
-<circle cx="594.3" cy="505.3" r="4.5" fill="#8d6a2f" stroke="#ffffff" stroke-width="1"><title>Gemini 3.8 Flash (high) · index 41.86 · $5.82</title></circle>
-<text x="603.3" y="497.3" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Gemini 3.8 (high)</text>
-<circle cx="891.9" cy="129.6" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Sonnet 5.5 (max) · index 68.36 · $21.20</title></circle>
-<text x="790.3" y="121.6" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Sonnet 5.5 (max)</text>
-<circle cx="840.7" cy="163.2" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Opus 5.5 (max) · index 65.99 · $16.97</title></circle>
-<text x="849.7" y="155.2" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Opus 5.5 (max)</text>
-<circle cx="565.3" cy="207.4" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Sonnet 5.5 (xhigh) · index 62.87 · $5.13</title></circle>
-<text x="574.3" y="199.4" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Sonnet 5.5 (xhigh)</text>
-<circle cx="338.1" cy="318.9" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Sonnet 5.5 (high) · index 55.01 · $1.91</title></circle>
-<text x="347.1" y="310.9" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Sonnet 5.5 (high)</text>
-<circle cx="174.5" cy="448.3" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Sonnet 5.5 (medium) · index 45.88 · $0.94</title></circle>
-<text x="183.5" y="440.3" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Sonnet 5.5 (medium)</text>
-<circle cx="117.7" cy="502.4" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Sonnet 5.5 (low) · index 42.06 · $0.73</title></circle>
-<text x="126.7" y="494.4" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Sonnet 5.5 (low)</text>
+<text x="72" y="56" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#57534e">Filled points: Teams price · Hollow points: provider API price, not in Cursor · 29 Sep 2026</text>
+<line x1="72" y1="467.1" x2="900" y2="467.1" stroke="#e7e5e4" stroke-width="1"/>
+<text x="62" y="471.1" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">40</text>
+<line x1="72" y1="406.3" x2="900" y2="406.3" stroke="#e7e5e4" stroke-width="1"/>
+<text x="62" y="410.3" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">45</text>
+<line x1="72" y1="345.5" x2="900" y2="345.5" stroke="#e7e5e4" stroke-width="1"/>
+<text x="62" y="349.5" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">50</text>
+<line x1="72" y1="284.7" x2="900" y2="284.7" stroke="#e7e5e4" stroke-width="1"/>
+<text x="62" y="288.7" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">55</text>
+<line x1="72" y1="223.9" x2="900" y2="223.9" stroke="#e7e5e4" stroke-width="1"/>
+<text x="62" y="227.9" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">60</text>
+<line x1="72" y1="163.1" x2="900" y2="163.1" stroke="#e7e5e4" stroke-width="1"/>
+<text x="62" y="167.1" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">65</text>
+<line x1="72" y1="102.3" x2="900" y2="102.3" stroke="#e7e5e4" stroke-width="1"/>
+<text x="62" y="106.3" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">70</text>
+<line x1="133.9" y1="78" x2="133.9" y2="540" stroke="#e7e5e4" stroke-width="1"/>
+<text x="133.9" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$0.1</text>
+<line x1="229.5" y1="78" x2="229.5" y2="540" stroke="#e7e5e4" stroke-width="1"/>
+<text x="229.5" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$0.2</text>
+<line x1="355.9" y1="78" x2="355.9" y2="540" stroke="#e7e5e4" stroke-width="1"/>
+<text x="355.9" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$0.5</text>
+<line x1="451.4" y1="78" x2="451.4" y2="540" stroke="#e7e5e4" stroke-width="1"/>
+<text x="451.4" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$1</text>
+<line x1="547.0" y1="78" x2="547.0" y2="540" stroke="#e7e5e4" stroke-width="1"/>
+<text x="547.0" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$2</text>
+<line x1="673.4" y1="78" x2="673.4" y2="540" stroke="#e7e5e4" stroke-width="1"/>
+<text x="673.4" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$5</text>
+<line x1="769.0" y1="78" x2="769.0" y2="540" stroke="#e7e5e4" stroke-width="1"/>
+<text x="769.0" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$10</text>
+<line x1="864.6" y1="78" x2="864.6" y2="540" stroke="#e7e5e4" stroke-width="1"/>
+<text x="864.6" y="560" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#78716c">$20</text>
+<line x1="72" y1="78" x2="72" y2="540" stroke="#d6d3d1"/>
+<line x1="72" y1="540" x2="900" y2="540" stroke="#d6d3d1"/>
+<text x="22" y="309" transform="rotate(-90 22 309)" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#44403c">Coding Agent Index</text>
+<text x="486" y="582" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#44403c">Cost per task (USD, log scale)</text>
+<polyline points="111.7,482.4 211.8,454.0 253.5,430.0 442.7,395.6 540.7,284.6 602.5,264.5 660.0,237.4 676.8,189.0 841.9,151.1 872.6,122.3" fill="none" stroke="#1c1917" stroke-width="1.75" stroke-linejoin="round"/>
+<circle cx="813.7" cy="196.9" r="4.5" fill="#b4532a" stroke="#ffffff" stroke-width="1"><title>Claude Fable 5.1 (max, with fallback) · index 62.22 · $13.83</title></circle>
+<text x="822.7" y="188.9" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Fable 5.1 (max*)</text>
+<circle cx="811.9" cy="227.2" r="4.5" fill="#b4532a" stroke="#ffffff" stroke-width="1"><title>Claude Opus 5 (max) · index 59.73 · $13.65</title></circle>
+<text x="820.9" y="219.2" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Opus 5 (max)</text>
+<circle cx="751.6" cy="269.2" r="4.5" fill="#1f7a4d" stroke="#ffffff" stroke-width="1"><title>Grok 4.7 (xhigh) · index 56.27 · $8.82</title></circle>
+<text x="760.6" y="261.2" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Grok 4.7 (xhigh)</text>
+<circle cx="752.9" cy="290.0" r="4.5" fill="#2c5f8a" stroke="#ffffff" stroke-width="1"><title>GPT-5.6 Sol (max) · index 54.56 · $8.90</title></circle>
+<text x="761.9" y="282.0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">GPT-5.6 Sol (max)</text>
+<circle cx="740.8" cy="293.2" r="4.5" fill="#5b4b8a" stroke="#ffffff" stroke-width="1"><title>Muse Spark 1.3 (max) · index 54.30 · $8.15</title></circle>
+<text x="749.8" y="307.2" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Muse (max)</text>
+<circle cx="734.9" cy="302.3" r="4.5" fill="#7a4e62" stroke="#ffffff" stroke-width="1"><title>GLM 5.3 (max) · index 53.55 · $7.81</title></circle>
+<text x="650.1" y="294.3" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">GLM 5.3 (max)</text>
+<circle cx="723.1" cy="322.0" r="4.5" fill="#3d6b66" stroke="#ffffff" stroke-width="1"><title>Kimi K3 · index 51.93 · $7.17</title></circle>
+<text x="732.1" y="336.0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Kimi K3</text>
+<circle cx="729.8" cy="366.1" r="4.5" fill="#5b4b8a" stroke="#ffffff" stroke-width="1"><title>Muse Spark 1.3 (xhigh) · index 48.30 · $7.53</title></circle>
+<text x="738.8" y="358.1" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Muse (xhigh)</text>
+<circle cx="626.9" cy="382.3" r="4.5" fill="#1f7a4d" stroke="#ffffff" stroke-width="1"><title>Grok 4.6 (xhigh) · index 46.97 · $3.57</title></circle>
+<text x="635.9" y="374.3" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Grok 4.6 (xhigh)</text>
+<circle cx="648.2" cy="427.9" r="4.5" fill="#2c5f8a" stroke="#ffffff" stroke-width="1"><title>GPT-5.6 Luna (max) · index 43.22 · $4.16</title></circle>
+<text x="657.2" y="419.9" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">GPT-5.6 Luna (max)</text>
+<circle cx="408.6" cy="442.0" r="4.5" fill="#b4532a" stroke="#ffffff" stroke-width="1"><title>Claude Sonnet 5.5 (low) · index 42.06 · $0.73</title></circle>
+<text x="417.6" y="434.0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Sonnet 5.5 (low)</text>
+<circle cx="694.2" cy="444.4" r="4.5" fill="#8d6a2f" stroke="#ffffff" stroke-width="1"><title>Gemini 3.8 Flash (high) · index 41.86 · $5.82</title></circle>
+<text x="703.2" y="436.4" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="450" fill="#292524">Gemini 3.8 (high)</text>
+<circle cx="872.6" cy="122.3" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Sonnet 5.5 (max) · index 68.36 · $21.20</title></circle>
+<text x="771.0" y="114.3" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Sonnet 5.5 (max)</text>
+<circle cx="841.9" cy="151.1" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Opus 5.5 (max) · index 65.99 · $16.97</title></circle>
+<text x="850.9" y="143.1" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Opus 5.5 (max)</text>
+<circle cx="676.8" cy="189.0" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Sonnet 5.5 (xhigh) · index 62.87 · $5.13</title></circle>
+<text x="685.8" y="181.0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Sonnet 5.5 (xhigh)</text>
+<circle cx="660.0" cy="237.4" r="6.5" fill="#f7f6f3" stroke="#6e5a3a" stroke-width="1.75" stroke-dasharray="3 2"><title>GPT-6 Astra XHigh + SWE-2 Medium · index 58.89 · $4.54 · not in Cursor</title></circle>
+<text x="468.8" y="229.4" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">GPT-6 Astra XHigh + SWE-2 Medium</text>
+<circle cx="602.5" cy="264.5" r="6.5" fill="#f7f6f3" stroke="#2c5f8a" stroke-width="1.75" stroke-dasharray="3 2"><title>GPT-6 Sol (max) · index 56.66 · $2.99 · not in Cursor</title></circle>
+<text x="611.5" y="256.5" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">GPT-6 Sol (max)</text>
+<circle cx="540.7" cy="284.6" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Sonnet 5.5 (high) · index 55.01 · $1.91</title></circle>
+<text x="549.7" y="276.6" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Sonnet 5.5 (high)</text>
+<circle cx="442.7" cy="395.6" r="6.5" fill="#b4532a" stroke="#1c1917" stroke-width="1.6"><title>Claude Sonnet 5.5 (medium) · index 45.88 · $0.94</title></circle>
+<text x="451.7" y="387.6" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">Sonnet 5.5 (medium)</text>
+<circle cx="253.5" cy="430.0" r="6.5" fill="#f7f6f3" stroke="#24566b" stroke-width="1.75" stroke-dasharray="3 2"><title>DeepSeek V4 Pro (max) · index 43.05 · $0.24 · not in Cursor</title></circle>
+<text x="262.5" y="422.0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">DeepSeek V4 Pro (max)</text>
+<circle cx="211.8" cy="454.0" r="6.5" fill="#f7f6f3" stroke="#2c5f8a" stroke-width="1.75" stroke-dasharray="3 2"><title>GPT-6 Luna (max) · index 41.07 · $0.18 · not in Cursor</title></circle>
+<text x="220.8" y="446.0" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">GPT-6 Luna (max)</text>
+<circle cx="111.7" cy="482.4" r="6.5" fill="#f7f6f3" stroke="#24566b" stroke-width="1.75" stroke-dasharray="3 2"><title>DeepSeek V4 Flash (max) · index 38.74 · $0.09 · not in Cursor</title></circle>
+<text x="120.7" y="474.4" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" fill="#292524">DeepSeek V4 Flash (max)</text>
 <text x="72" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Pareto line</text>
 <line x1="144" y1="608" x2="170" y2="608" stroke="#1c1917" stroke-width="1.75"/>
-<circle cx="186" cy="608" r="4.5" fill="#b4532a"/>
-<text x="194" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Anthropic</text>
-<circle cx="259.8" cy="608" r="4.5" fill="#1f7a4d"/>
-<text x="267.8" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Cursor</text>
-<circle cx="315.0" cy="608" r="4.5" fill="#2c5f8a"/>
-<text x="323.0" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">OpenAI</text>
-<circle cx="370.2" cy="608" r="4.5" fill="#5b4b8a"/>
-<text x="378.2" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Meta</text>
-<circle cx="413.0" cy="608" r="4.5" fill="#8d6a2f"/>
-<text x="421.0" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Google</text>
-<circle cx="468.2" cy="608" r="4.5" fill="#7a4e62"/>
-<text x="476.2" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Z.ai</text>
-<circle cx="511.0" cy="608" r="4.5" fill="#3d6b66"/>
-<text x="519.0" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Moonshot</text>
+<circle cx="190" cy="608" r="5" fill="#f7f6f3" stroke="#1c1917" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text x="200" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Not in Cursor</text>
+<circle cx="302" cy="608" r="4.5" fill="#b4532a"/>
+<text x="310" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Anthropic</text>
+<circle cx="375.8" cy="608" r="4.5" fill="#1f7a4d"/>
+<text x="383.8" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Cursor</text>
+<circle cx="431.0" cy="608" r="4.5" fill="#2c5f8a"/>
+<text x="439.0" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">OpenAI</text>
+<circle cx="486.2" cy="608" r="4.5" fill="#5b4b8a"/>
+<text x="494.2" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Meta</text>
+<circle cx="529.0" cy="608" r="4.5" fill="#8d6a2f"/>
+<text x="537.0" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Google</text>
+<circle cx="584.2" cy="608" r="4.5" fill="#7a4e62"/>
+<text x="592.2" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Z.ai</text>
+<circle cx="627.0" cy="608" r="4.5" fill="#3d6b66"/>
+<text x="635.0" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Moonshot</text>
+<circle cx="694.6" cy="608" r="4.5" fill="#24566b"/>
+<text x="702.6" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">DeepSeek</text>
+<circle cx="762.2" cy="608" r="4.5" fill="#6e5a3a"/>
+<text x="770.2" y="612" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Cognition</text>
 </svg>

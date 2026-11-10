@@ -43,6 +43,22 @@ PROVIDER_COLOR = {
     "Google": "#8d6a2f",
     "Z.ai": "#7a4e62",
     "Moonshot": "#3d6b66",
+    "DeepSeek": "#24566b",
+    "Alibaba": "#6a5344",
+    "Cognition": "#6e5a3a",
+}
+
+OUTSIDE_PROVIDER = {
+    "openai": "OpenAI",
+    "deepseek": "DeepSeek",
+    "alibaba_cloud": "Alibaba",
+    "cognition": "Cognition",
+    "anthropic": "Anthropic",
+    "xai": "Cursor",
+    "meta": "Meta",
+    "google": "Google",
+    "zai": "Z.ai",
+    "moonshotai": "Moonshot",
 }
 
 
@@ -71,6 +87,13 @@ def _chart_label(label: str) -> str:
         .replace(", with fallback", "*")
     )
     return short
+
+
+def outside_name(run: dict) -> str:
+    name = run["model"]
+    name = name.replace(" 0731", "").replace(" 0813", "")
+    name = name.replace(" ({'reasoning_effort': 'max'})", "")
+    return name
 
 
 def short_name(run: dict, cursor_name: str) -> str:
@@ -144,18 +167,35 @@ def build() -> dict:
     aa_models = aa_doc["models"]
     rate = cursor_doc["tokenRateUsdPerMillion"]
     included = []
-    excluded = []
     for run in runs:
         key = match_key(run)
         if key is None or key not in cursor_models:
-            excluded.append(
+            # Kept for the Pareto calculation. Drawn only if the point is on the line.
+            # Cost stays the provider API price: Cursor does not sell the model.
+            included.append(
                 {
-                    "label": run["label"],
-                    "model": run["model"],
+                    "id": run["slug"],
+                    "label": outside_name(run),
+                    "aaLabel": run["label"],
                     "agent": run["agent"],
-                    "index": run["index"] * 100,
-                    "aaCostUsd": run["costUsdAa"],
-                    "reason": "Not a single model on the Cursor pricing page",
+                    "model": run["model"],
+                    "cursorModel": None,
+                    "provider": OUTSIDE_PROVIDER.get(run["provider"], run["provider"]),
+                    "firstParty": False,
+                    "inCursor": False,
+                    "index": round(run["index"] * 100, 2),
+                    "aaCostUsd": round(run["costUsdAa"], 4),
+                    "individualUsd": round(run["costUsdAa"], 4),
+                    "teamsUsd": round(run["costUsdAa"], 4),
+                    "teamsFeeUsd": 0.0,
+                    "priceDiffersFromAa": False,
+                    "tokens": {
+                        "uncachedInput": round(run["inputTokens"] - run["cacheTokens"]),
+                        "cacheRead": round(run["cacheTokens"]),
+                        "cacheWrite": 0,
+                        "output": round(run["outputTokens"]),
+                    },
+                    "cursorPrice": None,
                 }
             )
             continue
@@ -184,6 +224,7 @@ def build() -> dict:
                 "cursorModel": cursor_price["cursorName"],
                 "provider": cursor_price["provider"],
                 "firstParty": cursor_price["firstParty"],
+                "inCursor": True,
                 "index": round(run["index"] * 100, 2),
                 "aaCostUsd": round(run["costUsdAa"], 4),
                 "individualUsd": round(individual, 4),
@@ -218,19 +259,35 @@ def build() -> dict:
         "pricing": "https://cursor.com/docs/models-and-pricing",
         "intelligence": "https://artificialanalysis.ai/agents/coding-agents",
         "points": included,
-        "excluded": excluded,
+        "excluded": [
+            {
+                "label": point["aaLabel"],
+                "model": point["model"],
+                "agent": point["agent"],
+                "index": point["index"],
+                "aaCostUsd": point["aaCostUsd"],
+                "reason": "Not in Cursor, and not on the Pareto line in either price view",
+            }
+            for point in included
+            if not point["inCursor"] and not point["paretoIndividual"] and not point["paretoTeams"]
+        ],
         "frontierIndividual": [p["label"] for p in pareto(included, "individualUsd")],
         "frontierTeams": [p["label"] for p in pareto(included, "teamsUsd")],
     }
 
 
+def shown_points(result: dict, pareto_key: str) -> list[dict]:
+    """Cursor models, plus outside models that sit on this view's Pareto line."""
+    return [p for p in result["points"] if p["inCursor"] or p[pareto_key]]
+
+
 def svg_chart(result: dict, cost_key: str, pareto_key: str, title: str, subtitle: str) -> str:
-    points = result["points"]
+    points = shown_points(result, pareto_key)
     width, height = 980, 640
-    left, right, top, bottom = 72, 930, 78, 560
+    left, right, top, bottom = 72, 900, 78, 540
     costs = [p[cost_key] for p in points]
-    xmin, xmax = min(costs) * 0.82, max(costs) * 1.18
-    ymin, ymax = 38, 72
+    xmin, xmax = min(costs) * 0.75, max(costs) * 1.22
+    ymin, ymax = 34, 72
 
     def x_of(cost: float) -> float:
         t = (math.log10(cost) - math.log10(xmin)) / (math.log10(xmax) - math.log10(xmin))
@@ -243,7 +300,7 @@ def svg_chart(result: dict, cost_key: str, pareto_key: str, title: str, subtitle
     def tick(value: float) -> str:
         return f"{value:g}"
 
-    x_ticks = [v for v in (0.5, 1, 2, 5, 10, 20) if xmin <= v <= xmax]
+    x_ticks = [v for v in (0.1, 0.2, 0.5, 1, 2, 5, 10, 20) if xmin <= v <= xmax]
     y_ticks = list(range(40, 75, 5))
     frontier = sorted(
         (p for p in points if p[pareto_key]),
@@ -289,11 +346,15 @@ def svg_chart(result: dict, cost_key: str, pareto_key: str, title: str, subtitle
         y = y_of(point["index"])
         color = PROVIDER_COLOR.get(point["provider"], "#44403c")
         radius = 6.5 if point[pareto_key] else 4.5
-        stroke = "#1c1917" if point[pareto_key] else "#ffffff"
-        sw = 1.6 if point[pareto_key] else 1
+        outside = not point["inCursor"]
+        fill = "#f7f6f3" if outside else color
+        stroke = color if outside else ("#1c1917" if point[pareto_key] else "#ffffff")
+        sw = 1.75 if outside else (1.6 if point[pareto_key] else 1)
+        dash = ' stroke-dasharray="3 2"' if outside else ""
+        availability = "" if point["inCursor"] else " · not in Cursor"
         parts.append(
-            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{radius}" fill="{color}" stroke="{stroke}" stroke-width="{sw}">'
-            f"<title>{point['label']} · index {point['index']:.2f} · ${point[cost_key]:.2f}</title></circle>"
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{radius}" fill="{fill}" stroke="{stroke}" stroke-width="{sw}"{dash}>'
+            f"<title>{point['label']} · index {point['index']:.2f} · ${point[cost_key]:.2f}{availability}</title></circle>"
         )
         label = point["chartLabel"]
         width_est = len(label) * 5.6 + 4
@@ -314,7 +375,13 @@ def svg_chart(result: dict, cost_key: str, pareto_key: str, title: str, subtitle
     parts.append(
         f'<line x1="{legend_x + 72}" y1="{legend_y - 4}" x2="{legend_x + 98}" y2="{legend_y - 4}" stroke="#1c1917" stroke-width="1.75"/>'
     )
-    lx = legend_x + 114
+    parts.append(
+        f'<circle cx="{legend_x + 118}" cy="{legend_y - 4}" r="5" fill="#f7f6f3" stroke="#1c1917" stroke-width="1.5" stroke-dasharray="3 2"/>'
+    )
+    parts.append(
+        f'<text x="{legend_x + 128}" y="{legend_y}" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#44403c">Not in Cursor</text>'
+    )
+    lx = legend_x + 230
     for name, color in PROVIDER_COLOR.items():
         if not any(p["provider"] == name for p in points):
             continue
@@ -395,14 +462,14 @@ def write_html(result: dict) -> None:
 <body>
 <main>
   <h1>Coding Agent Index vs Cursor cost per task</h1>
-  <p class="lede">Each point is one Artificial Analysis coding-agent run. Height is the Coding Agent Index. Position left is what that same token mix costs on Cursor. The line joins the Pareto set: nothing else is both smarter and cheaper.</p>
+  <p class="lede">Each filled point is a model Cursor sells. Hollow points are on the Pareto line and are not sold in Cursor; their cost is the provider API price. The line joins the set where nothing else plotted is both smarter and cheaper.</p>
   <div class="row">
     <button id="individual" aria-pressed="true" type="button">Individual plans</button>
     <button id="teams" aria-pressed="false" type="button">Teams and Enterprise</button>
   </div>
   <div class="chart"><svg id="plot" viewBox="0 0 980 620" width="100%"></svg></div>
   <p class="note" id="caption"></p>
-  <h2>Runs priced on Cursor</h2>
+  <h2>On the chart</h2>
   <table id="table"></table>
   <h2>Left off the chart</h2>
   <table id="excluded"></table>
@@ -419,11 +486,11 @@ function costOf(p) {{ return mode === "teams" ? p.teamsUsd : p.individualUsd; }}
 function onFrontier(p) {{ return mode === "teams" ? p.paretoTeams : p.paretoIndividual; }}
 
 function draw() {{
-  const pts = RESULT.points;
+  const pts = RESULT.points.filter((p) => p.inCursor || onFrontier(p));
   const costs = pts.map(costOf);
-  const xmin = Math.min(...costs) * 0.82;
-  const xmax = Math.max(...costs) * 1.18;
-  const ymin = 38, ymax = 72;
+  const xmin = Math.min(...costs) * 0.75;
+  const xmax = Math.max(...costs) * 1.22;
+  const ymin = 34, ymax = 72;
   const L = 72, R = 930, T = 28, B = 500;
   const W = 980, H = 620;
   const xOf = (c) => L + (Math.log10(c) - Math.log10(xmin)) / (Math.log10(xmax) - Math.log10(xmin)) * (R - L);
@@ -442,7 +509,7 @@ function draw() {{
     const t = add("text", {{x: L - 10, y: y + 4, "text-anchor": "end", fill: "#78716c", "font-size": "11"}});
     t.textContent = v;
   }}
-  for (const v of [0.5, 1, 2, 5, 10, 20].filter(v => v >= xmin && v <= xmax)) {{
+  for (const v of [0.1, 0.2, 0.5, 1, 2, 5, 10, 20].filter(v => v >= xmin && v <= xmax)) {{
     const x = xOf(v);
     add("line", {{x1: x, y1: T, x2: x, y2: B, stroke: "#e7e5e4"}});
     const t = add("text", {{x, y: B + 20, "text-anchor": "middle", fill: "#78716c", "font-size": "11"}});
@@ -453,7 +520,7 @@ function draw() {{
   const ylab = add("text", {{x: 22, y: (T + B) / 2, "text-anchor": "middle", fill: "#44403c", "font-size": "12", transform: `rotate(-90 22 ${{(T + B) / 2}})`}});
   ylab.textContent = "Coding Agent Index";
   const xlab = add("text", {{x: (L + R) / 2, y: B + 44, "text-anchor": "middle", fill: "#44403c", "font-size": "12"}});
-  xlab.textContent = "Cursor cost per task (USD, log scale)";
+  xlab.textContent = "Cost per task (USD, log scale)";
   const frontier = pts.filter(onFrontier).sort((a, b) => costOf(a) - costOf(b));
   add("polyline", {{
     points: frontier.map(p => `${{xOf(costOf(p)).toFixed(1)}},${{yOf(p.index).toFixed(1)}}`).join(" "),
@@ -476,17 +543,19 @@ function draw() {{
   }}
   for (const p of [...pts].sort((a, b) => Number(onFrontier(a)) - Number(onFrontier(b)))) {{
     const x = xOf(costOf(p)), y = yOf(p.index);
+    const outside = !p.inCursor;
     const c = add("circle", {{
       cx: x, cy: y, r: onFrontier(p) ? 6.5 : 4.5,
-      fill: COLOR[p.provider] || "#44403c",
-      stroke: onFrontier(p) ? "#1c1917" : "#fff",
-      "stroke-width": onFrontier(p) ? 1.6 : 1
+      fill: outside ? "#fff" : (COLOR[p.provider] || "#44403c"),
+      stroke: outside ? (COLOR[p.provider] || "#1c1917") : (onFrontier(p) ? "#1c1917" : "#fff"),
+      "stroke-width": outside ? 1.75 : (onFrontier(p) ? 1.6 : 1),
+      "stroke-dasharray": outside ? "3 2" : ""
     }});
     c.addEventListener("mousemove", (ev) => {{
       tip.style.display = "block";
       tip.style.left = (ev.clientX + 12) + "px";
       tip.style.top = (ev.clientY + 12) + "px";
-      tip.textContent = `${{p.label}} · index ${{p.index.toFixed(2)}} · $${{costOf(p).toFixed(2)}} · ${{p.agent}}`;
+      tip.textContent = `${{p.label}} · index ${{p.index.toFixed(2)}} · $${{costOf(p).toFixed(2)}} · ${{p.agent}}${{outside ? " · not in Cursor" : ""}}`;
     }});
     c.addEventListener("mouseleave", () => {{ tip.style.display = "none"; }});
     const label = p.chartLabel;
@@ -503,7 +572,10 @@ function draw() {{
   const key = add("text", {{x: lx, y: ly, fill: "#44403c", "font-size": "11"}});
   key.textContent = "Pareto line";
   add("line", {{x1: lx + 72, y1: ly - 4, x2: lx + 98, y2: ly - 4, stroke: "#1c1917", "stroke-width": "1.75"}});
-  lx += 114;
+  add("circle", {{cx: lx + 118, cy: ly - 4, r: 5, fill: "#fff", stroke: "#1c1917", "stroke-width": 1.5, "stroke-dasharray": "3 2"}});
+  const outsideKey = add("text", {{x: lx + 128, y: ly, fill: "#44403c", "font-size": "11"}});
+  outsideKey.textContent = "Not in Cursor";
+  lx += 230;
   for (const [name, color] of Object.entries(COLOR)) {{
     if (!pts.some(p => p.provider === name)) continue;
     add("circle", {{cx: lx, cy: ly - 4, r: 4.5, fill: color}});
@@ -512,25 +584,24 @@ function draw() {{
     lx += 18 + name.length * 6.2;
   }}
   document.getElementById("caption").textContent = mode === "teams"
-    ? "Teams and Enterprise add $0.25 per million tokens on third-party models (input, output, and cache). Grok is exempt. Individual plans do not pay this fee."
-    : "Individual plans use the Cursor list price only. Gemini 3.8 Flash output is $3.50/M here versus $3.75/M on Artificial Analysis. Every other plotted model uses the same per-token rates on both.";
-  const headers = ["Model", "Agent on the benchmark", "Index", "AA cost", "Cursor individual", "Cursor teams", "On the line"];
+    ? "Filled points: Teams and Enterprise price, including the $0.25/M token rate on third-party models. Grok is exempt. Hollow points stay at the provider API price, because Cursor does not sell them."
+    : "Filled points: Cursor list price on individual plans. Hollow points are provider API prices for models that sit on the Pareto line and are not in Cursor.";
+  const headers = ["Model", "Agent on the benchmark", "Index", "Cost on this chart", "In Cursor", "On the line"];
   const table = document.getElementById("table");
-  table.innerHTML = "<thead><tr>" + headers.map((h, i) => `<th class="${{i > 1 && i < 6 ? "num" : ""}}">${{h}}</th>`).join("") + "</tr></thead>";
+  table.innerHTML = "<thead><tr>" + headers.map((h, i) => `<th class="${{i === 2 || i === 3 ? "num" : ""}}">${{h}}</th>`).join("") + "</tr></thead>";
   const body = document.createElement("tbody");
   for (const p of pts) {{
     const tr = document.createElement("tr");
     if (onFrontier(p)) tr.className = "on";
     const cells = [
       p.label, p.agent, p.index.toFixed(2),
-      "$" + p.aaCostUsd.toFixed(2),
-      "$" + p.individualUsd.toFixed(2),
-      "$" + p.teamsUsd.toFixed(2),
+      "$" + costOf(p).toFixed(2),
+      p.inCursor ? "Yes" : "No",
       onFrontier(p) ? "Yes" : ""
     ];
     cells.forEach((value, i) => {{
       const td = document.createElement("td");
-      if (i > 1 && i < 6) td.className = "num";
+      if (i === 2 || i === 3) td.className = "num";
       td.textContent = value;
       tr.appendChild(td);
     }});
@@ -580,7 +651,7 @@ def main() -> None:
             "individualUsd",
             "paretoIndividual",
             "Coding Agent Index vs Cursor cost per task",
-            "Individual plans · Cursor list price · 29 Sep 2026",
+            "Filled points: Cursor list price · Hollow points: not sold in Cursor · 29 Sep 2026",
         )
     )
     (OUT / "teams.svg").write_text(
@@ -589,7 +660,7 @@ def main() -> None:
             "teamsUsd",
             "paretoTeams",
             "Coding Agent Index vs Cursor cost per task",
-            "Teams and Enterprise · list price plus $0.25/M token rate · 29 Sep 2026",
+            "Filled points: Teams price · Hollow points: provider API price, not in Cursor · 29 Sep 2026",
         )
     )
     write_html(result)

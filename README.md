@@ -9,10 +9,10 @@ The score belongs to the harness Artificial Analysis ran (Claude Code, Codex, Gr
 ## Charts
 
 - `output/chart.html` — both price views, hover for the exact point
-- `output/individual.svg` — Pro, Pro Plus, Ultra, and Start: list price only
-- `output/teams.svg` — Teams and Enterprise: list price plus the $0.25 per million token rate on third-party models
+- `output/individual.svg` — filled points are Pro, Pro Plus, Ultra, and Start list prices
+- `output/teams.svg` — filled points add the $0.25 per million token rate on third-party models
 
-Open the HTML file in a browser. The dark line is the Pareto set: no other plotted model is both smarter and cheaper.
+Hollow points are on the Pareto line and are not sold in Cursor. Their cost is the provider API price from Artificial Analysis. Open the HTML file in a browser. The dark line is the Pareto set: no other plotted model is both smarter and cheaper.
 
 ## How the cost is rebuilt
 
@@ -30,20 +30,22 @@ Fast mode, long-context multipliers, and regional uplifts are not applied. Per-t
 
 ## Frontier, individual plans
 
-| Model | Index | Cost per task |
-| --- | ---: | ---: |
-| GPT-5.6 Luna (max) | 43.22 | $0.44 |
-| Claude Sonnet 5.5 (medium) | 45.88 | $0.62 |
-| Claude Sonnet 5.5 (high) | 55.01 | $1.24 |
-| Claude Sonnet 5.5 (xhigh) | 62.87 | $3.33 |
-| Claude Opus 5.5 (max) | 65.99 | $13.04 |
-| Claude Sonnet 5.5 (max) | 68.36 | $14.19 |
+Hollow rows are not sold in Cursor. Their cost is the provider API price.
 
-On Teams and Enterprise, Luna drops off and Claude Sonnet 5.5 (low) at $0.73 becomes the cheap end. The rest of the line is the same models, at higher third-party cost. Grok 4.7 and Grok 4.6 stay at list price and are still inside the frontier, because a lower Sonnet effort setting scores higher for less money on this index.
+| Model | In Cursor | Index | Cost per task |
+| --- | --- | ---: | ---: |
+| DeepSeek V4 Flash (max) | No | 38.74 | $0.09 |
+| GPT-6 Luna (max) | No | 41.07 | $0.18 |
+| DeepSeek V4 Pro (max) | No | 43.05 | $0.24 |
+| GPT-5.6 Luna (max) | Yes | 43.22 | $0.44 |
+| Claude Sonnet 5.5 (medium) | Yes | 45.88 | $0.62 |
+| Claude Sonnet 5.5 (high) | Yes | 55.01 | $1.24 |
+| GPT-6 Sol (max) | No | 56.66 | $2.99 |
+| Claude Sonnet 5.5 (xhigh) | Yes | 62.87 | $3.33 |
+| Claude Opus 5.5 (max) | Yes | 65.99 | $13.04 |
+| Claude Sonnet 5.5 (max) | Yes | 68.36 | $14.19 |
 
-## Left off on purpose
-
-GPT-6 Sol, GPT-6 Luna, GPT-6 Astra, DeepSeek V4, and Qwen3.8 Max are on the Artificial Analysis chart and are not rows on Cursor's pricing page. Devin Fusion runs two models, so it is not a Cursor model choice either. Composer 2.5 and Grok 4.5 are on the Cursor price list and have no Coding Agent Index score, so they are not plotted.
+GPT-6 Astra and Qwen3.8 Max are not on this line: a Cursor model is both smarter and cheaper. On the Teams chart the token rate pushes Sonnet xhigh to $5.13, so the Devin Fusion run of GPT-6 Astra plus SWE-2 (index 58.89, $4.54 API) joins the line. Composer 2.5 and Grok 4.5 have Cursor prices and no Coding Agent Index score, so they are not plotted.
 
 Fable 5.1 (max*) is included. Artificial Analysis marks that run as falling back to another model on some safety refusals.
 
